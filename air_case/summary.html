@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试结果汇总</title>
+    <style>
+        .fail {
+            color: red;
+			width: 7emem;
+			text-align: center;
+        }
+        .success {
+            color: green;
+			width: 7emem;
+			text-align: center;
+        }
+		.details-col-elapsed {
+			width: 7em;
+			text-align: center;
+		}
+		.details-col-msg {
+			width: 7em;
+			text-align: center;
+			background-color:#ccc;
+		}
+
+    </style>
+</head>
+<body>
+<div>
+<div><h2>Test Statistics</h2></div>
+
+    <table width="800" border="thin" cellspacing="0" cellpadding="0">
+        <tr  width="600">
+            <th width="300" class='details-col-msg'>案例名称</th>
+            <th class='details-col-msg'>执行结果</th>
+        </tr>
+        
+        <tr width="600">
+            <td class='details-col-elapsed'><a href="log/打开互动消息/log.html" target="view_window">打开互动消息</a></td>
+            <td class="fail">失败</td>
+        </tr>
+        
+        <tr width="600">
+            <td class='details-col-elapsed'><a href="log/打开我的关注/log.html" target="view_window">打开我的关注</a></td>
+            <td class="fail">失败</td>
+        </tr>
+        
+        <tr width="600">
+            <td class='details-col-elapsed'><a href="log/打开我的文章/log.html" target="view_window">打开我的文章</a></td>
+            <td class="fail">失败</td>
+        </tr>
+        
+    </table>
+</div>
+</body>
+</html>

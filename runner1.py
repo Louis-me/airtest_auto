@@ -17,7 +17,7 @@ from util.common import *
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
 )
-play_back = - 1 # 1是开启失败重测，-1不开启
+play_back = - 1  # 1是开启失败重测，-1不开启
 
 
 def run_case(root_dir):
@@ -51,7 +51,7 @@ def run(root_dir, test_case, device, play_back):
         #     os.makedirs(log)
         #     print(str(log) + 'is created')
     output_file = log + '\\' + 'log.html'
-    args = Namespace(device=device, log=log, compress=None, recording=None, script=script)
+    args = Namespace(device=device + "?touch_method=ADBTOUCH", log=log, compress=None, recording=None, script=script)
     try:
         run_script(args, AirtestCase)
         is_success = True
@@ -87,6 +87,11 @@ class CustomAirtestCase(AirtestCase):
         super(CustomAirtestCase, self).setUp()
 
     def run_case(self, device):
+        """
+        多设备不同用例
+        :param device:
+        :return:
+        """
         _dev = device.split("/")[3]
         data_list = get_yaml(PATH("config/mulit_case.yaml"))
         # 读取当前手机是否在配置文件中
@@ -96,6 +101,20 @@ class CustomAirtestCase(AirtestCase):
                 get_run = run(self.root_dir, i, device, -1)
                 if not get_run:
                     self.fail_data.append(i)
+        self.run_play_back(self.root_dir, device, play_back)
+
+    def run_same_case(self, device):
+        """
+        多设备相同用例
+        :param device:
+        :return:
+        """
+        _dev = device.split("/")[3]
+        data_list = get_test_case(self.root_dir, 0)  # 多设备执行相同用例
+        for i in data_list:
+            get_run = run(self.root_dir, i, device, -1)
+            if not get_run:
+                self.fail_data.append(i)
         self.run_play_back(self.root_dir, device, play_back)
 
     def run_air(self, device):

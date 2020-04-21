@@ -21,20 +21,7 @@ if __name__ == '__main__':
     run_case(root_path, run_model, play_back)
 
 ```
-- 当然，如果你的多机执行相同的用例，也可以修改下runner.py的部分代码：
 
-```buildoutcfg
-def run_case(root_dir, run_model, play_back):
-    devices = attached_devices()
-    if not devices:
-        print("无可用设备")
-    else:
-        test = CustomAirtestCase()
-        device = ['Android://127.0.0.1:5037/%s?touch_method=ADBTOUCH' % devices[0]]  # 这里只取一台设备
-        # 这里改成多台即可
-        test.run_air(root_dir,  run_model, play_back, device)
-
-```
 
 ### 多机不同用例
 
@@ -53,6 +40,26 @@ df20fed3:
 
 - 如果你想打开失败重测，只要把runner1.py顶部的play_back 改为1
 
+### 多机执行相同用例
+- runner1.py 使用run_same_case函数运行即可
+
+```buildoutcfg
+    def run_same_case(self, device):
+        """
+        多设备相同用例
+        :param device:
+        :return:
+        """
+        _dev = device.split("/")[3]
+        data_list = get_test_case(self.root_dir, 0)  # 多设备执行相同用例
+        for i in data_list:
+            get_run = run(self.root_dir, i, device, -1)
+            if not get_run:
+                self.fail_data.append(i)
+        self.run_play_back(self.root_dir, device, play_back)
+
+
+```
 
 
 ## 测试报告

@@ -53,7 +53,7 @@ df20fed3:
 
 - 如果你想打开失败重测，只要把runner1.py顶部的play_back 改为1
 
-```
+
 
 ## 测试报告
 ![report2.png](img/report2.png "report2.png")

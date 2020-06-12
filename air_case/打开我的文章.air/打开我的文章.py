@@ -1,15 +1,22 @@
 # -*- encoding=utf8 -*-
 __author__ = "Administrator"
-
-from airtest.core.api import *
-
-
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
-poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
+from util.app_util import *
 
-auto_setup(__file__)
 
-start_app("com.jianshu.haruki")
-poco("com.jianshu.haruki:id/tab_mine").click()
-poco("com.jianshu.haruki:id/user_mine_article").click()
-stop_app("com.jianshu.haruki")
+def operate():
+    try:
+        poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
+        init_app()
+        # 点击我的
+        poco("com.jianshu.haruki:id/tv_more_menu").click()
+        # 点击我的文章
+        poco(text="我的文章").click()
+        # 向上滑动
+        poco("com.jianshu.haruki:id/refresh_view").focus([0.5, 0.5]).swipe([0.5, -0.5])
+    except Exception as e:
+        snapshot(msg="报错后截图")
+        raise e
+
+
+operate()

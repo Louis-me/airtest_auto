@@ -1,0 +1,9 @@
+# 点击我的关注
+- poco("com.jianshu.haruki:id/tv_guanzhu").click()
+# 点击动态下最近更新的作者第一条数据
+- poco("com.jianshu.haruki:id/userIcon").click()
+# 关于测试用例编写
+  # 1. 支持函数调用公共模块，比如打开我的个人中心
+  # - open_me(poco)
+  # 2. 条件嵌套，如 poco().click if poco().exists() else print("")，这里简单试用是可以，但是最好需要在operate_test_case
+  # 联合进行测试,若有问题可以在切割click时，进行判断处理（待详细测试）

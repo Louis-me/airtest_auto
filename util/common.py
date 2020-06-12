@@ -39,6 +39,7 @@ def get_test_case(root_dir, run_model):
     : run_model: 0执行全部用例|1执行调试用例，数据来源为debug.yaml|2执行失败用例,数据来源fail.yaml
     :return:
     """
+    print(run_model)
     if run_model == 0:
         data = []
         for f in os.listdir(root_dir):

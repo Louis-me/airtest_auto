@@ -1,15 +1,20 @@
 # -*- encoding=utf8 -*-
-__author__ = "Administrator"
-
-from airtest.core.api import *
-
+from util.app_util import *
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
-poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
 
-auto_setup(__file__)
 
-start_app("com.jianshu.haruki")
-poco("com.jianshu.haruki:id/tab_subscribe").click()
-poco("com.jianshu.haruki:id/follow_list_recyclerView").click()
-stop_app("com.jianshu.haruki")
-           
+def operate():
+    try:
+        poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
+        init_app()
+        # 点击我的关注
+        poco("com.jianshu.haruki:id/tv_guanzhu").click()
+        # 点击动态下最近更新的作者第一条数据
+        poco("com.jianshu.haruki:id/userIcon").click()
+
+    except Exception as e:
+        snapshot(msg="报错后截图")
+        raise e
+
+
+operate()

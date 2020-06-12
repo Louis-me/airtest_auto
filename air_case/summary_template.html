@@ -33,11 +33,23 @@
         <tr  width="600">
             <th width="300" class='details-col-msg'>案例名称</th>
             <th class='details-col-msg'>执行结果</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>耗时</th>
         </tr>
         {% for r in results %}
         <tr width="600">
-            <td class='details-col-elapsed'><a href="log/{{r.name}}/log.html" target="view_window">{{r.name}}</a></td>
+            <td class='details-col-elapsed'>
+                {% if r.module %}
+                    <a href="log/{{r.module}}/{{r.name}}/log.html" target="view_window">{{r.name}}</a>
+                {% else %}
+                    <a href="log/{{r.name}}/log.html" target="view_window">{{r.name}}</a>
+                {% endif %}
+            </td>
             <td class="{{'success' if r.result else 'fail'}}">{{"成功" if r.result else "失败"}}</td>
+            <td>{{r.start_time}}</td>
+            <td>{{r.end_time}}</td>
+            <td>{{r.sum_time}}</td>
         </tr>
         {% endfor %}
     </table>

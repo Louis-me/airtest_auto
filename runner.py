@@ -10,7 +10,7 @@ import jinja2
 import shutil
 import os
 import io
-from util.AndroidUtil import attached_devices
+from util.android_util import attached_devices
 from util.common import *
 
 PATH = lambda p: os.path.abspath(

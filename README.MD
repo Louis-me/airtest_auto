@@ -64,12 +64,7 @@ df20fed3:
 
 ## 测试报告
 ![report2.png](img/report2.png "report2.png")
-
-## 总结
-- 这个简单的demo版本，该有的功能基本都有，后续版本或许会有，数据持久化改为数据库
-- 测试报告优化
-- 持续集成
-
  
    
-
+## 其他
+[查看我的changelog](changelog.MD)

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-__author__ = 'shikun'
 __CreateAt__ = '2020/6/9-21:39'
 
 from airtest.core.api import *

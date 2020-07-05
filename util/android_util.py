@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
 import os
-__author__ = 'shikun'
 __CreateAt__ = '2020/4/19-17:44'
 
 

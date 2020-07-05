@@ -2,7 +2,6 @@
 # -*- coding=utf-8 -*-
 import datetime
 
-__author__ = 'shikun'
 __CreateAt__ = '2020/4/19-17:34'
 
 from airtest.cli.runner import AirtestCase, run_script

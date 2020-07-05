@@ -2,8 +2,10 @@
 # -*- coding=utf-8 -*-
 __author__ = 'shikun'
 __CreateAt__ = '2020/6/9-21:39'
+
 from airtest.core.api import *
 import yaml
+from datetime import datetime
 
 
 def init_app(extend=None):
@@ -14,6 +16,7 @@ def init_app(extend=None):
     """
     auto_setup(__file__)
     stop_app("com.jianshu.haruki")
+    sleep(2)
     start_app("com.jianshu.haruki")
 
 
@@ -24,20 +27,49 @@ def operate_test_case(poco, yml):
     :param yml:
     :return:
     """
+    # handing_error(poco)
+    skip_adv(poco)
     with open(yml, encoding='utf-8') as f:
         d = yaml.safe_load(f)
     # 启动应用后的容错
-    handing_error(poco)
     for i in d:
-        event = i.split(".click()")
-        # 如果是点击
-        if len(event) > 1:
+        event_click = i.split(".click()")
+        event_if = i.split("if")
+        print("元素为：%s" % i)
+        print("操作元素开始时间：%s" % datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        # 非if语句的click事件
+        if len(event_click) > 1 and len(event_if) == 1:
             # 智能等待
-            eval(event[0] + ".wait_for_appearance(60)")
-        # 执行用例
-        eval(i)
+            eval(event_click[0] + ".wait_for_appearance(60)")
+            # 执行用例
+            eval(i)
+        else:
+            # 其他的poco事件
+            sleep(2)
+            eval(i)
+        print("操作元素结束时间：%s" % datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
         # 操作元素后的容错
         handing_error(poco)
+
+
+def skip_adv(poco):
+    """
+    跳过广告
+    :param poco:
+    :return:
+    """
+    num = 0
+    while True:
+        sleep(1)
+        if poco(textMatches="^.*跳过$").exists():
+            poco(textMatches="^.*跳过$").click()
+            print("已经点击跳过广告按钮")
+            break
+        num += 1
+        if num > 5:
+            print("没有找到跳过广告按钮")
+            break
 
 
 def handing_error(poco):
@@ -47,11 +79,16 @@ def handing_error(poco):
     :return:
     """
     # 自定义容错处理,比如系统的授权
-    for j in ["跳过广告", "我知道了", "始终运行"]:
+    for j in ["我知道了", "始终运行", "取消"]:
         if poco(text=j).exists():
             # package = poco(text=j).attr("package")
             # # 只容错非测试应用包的数据
             # if package.find("jianshu") < 0:
             poco(text=j).click()
-            print("进入了容错")
+            print("进入第一次容错")
             sleep(2)
+        for k in ["我知道了", "始终运行", "取消"]:
+            if poco(text=j).exists():
+                poco(text=k).click()
+                print("进入二次容错")
+                sleep(2)

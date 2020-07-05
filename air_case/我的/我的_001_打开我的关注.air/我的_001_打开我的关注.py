@@ -9,7 +9,7 @@ abs_path = os.path.abspath(os.path.dirname(__file__))
 # 得到公共用例目录
 common_path = os.path.join(abs_path.split("airtest_auto")[0], "airtest_auto", "util")
 sys.path.append(common_path)
-from util.app_util import *
+from app_util import *
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 
@@ -32,3 +32,5 @@ def operate():
 
 
 operate()
+
+

@@ -1,0 +1,7 @@
+- poco(text="取消").click() if poco(text="取消").exists() else print("")
+# 点击我的
+- poco("com.jianshu.haruki:id/tv_more_menu").click()
+# 点击我的文章
+- poco(text="我的文章").click()
+# 向上滑动
+- poco("com.jianshu.haruki:id/refresh_view").focus([0.5, 0.5]).swipe([0.5, -0.5])

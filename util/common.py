@@ -2,68 +2,67 @@
 # -*- coding=utf-8 -*-
 __author__ = 'shikun'
 __CreateAt__ = '2020/4/19-18:31'
-import yaml
+
 import os
-PATH = lambda p: os.path.abspath(
-    os.path.join(os.path.dirname(__file__), p)
-)
-
-def get_yaml(path):
-    with open(path, encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from datetime import datetime
 
 
-def set_yaml(path, data, model="w"):
-    with open(path, mode=model, encoding="utf-8") as f:
-        yaml.safe_dump(data, f)
+def get_test_case(data):
+    if data["test_plan"] == 1:
+        res = []
+        for i in data["test_module"]:
+            if os.path.isdir(os.path.join(data["root_path"], i)):
+                script_list = os.listdir(os.path.join(data["root_path"], i))
+                for j in script_list:
+                    if j.find(".air") != -1:
+                        res.append({"module": i, "case": j})
+        return res
+    elif data["test_plan"] == 0:
+        res = []
+        if os.path.join(data["root_path"]):
+            script_list = os.listdir(data["root_path"])
+            for i in script_list:
+                module_case = os.path.isdir(os.path.join(data["root_path"], i))
+                if module_case:
+                    for j in os.listdir(os.path.join(data["root_path"], i)):
+                        if j.find(".air") != -1:
+                            res.append({"module": i, "case": j})
+        return res
 
 
-def setting_result(data):
+def get_test_case_runner2(data):
+    if data["test_plan"] == 1:
+        return data["test_data"]
+    elif data["test_plan"] == 0:
+        res = []
+        if os.path.join(data["root_path"]):
+            script_list = os.listdir(data["root_path"])
+            for i in script_list:
+                if i.find(".air") != -1:
+                    res.append(i)
+        return res
+
+
+def get_case_total_time(start_time, end_time):
     """
-    设置用例结果
-    :param data: {} 存放的数据字典
+    得到用例的总耗时
+    :param start_time:  datetime.now().strftime("%H:%M:%S")
+    :param end_time:
     :return:
     """
-    get_d = get_yaml(PATH("../config/result.yaml"))
-    get_d["result"].append(data)
-    set_yaml(PATH("../config/result.yaml"), get_d, model="a")
+    formats = "%H:%M:%S"
+    total_time = datetime.strptime(end_time, formats) - datetime.strptime(start_time, formats)
+    return str(total_time)
 
 
-def init_data():
-    set_yaml(PATH("../config/result.yaml"), {"result": []})
-
-
-def get_test_case(root_dir, run_model):
+def get_test_modules(modules):
     """
-    得到测试用例列表数据
-    : run_model: 0执行全部用例|1执行调试用例，数据来源为debug.yaml|2执行失败用例,数据来源fail.yaml
+    得到测试模块
+    :param modules: list
     :return:
     """
-    print(run_model)
-    if run_model == 0:
-        data = []
-        for f in os.listdir(root_dir):
-            if f.endswith(".air"):
-                data.append(f)
-        if  len(data) > 0:
-            print("执行全部用例===用例有数据")
-        else:
-            print("执行全部用例===用例无数据")
-        return data
-    elif run_model == 1:
-        data = get_yaml(PATH("../config/debug.yaml"))
-        if len(data) > 0:
-            print("执行调试用例===用例有数据")
-        else:
-            print("执行调试用例==用例无法数据")
-        return data
-    elif run_model == 2:
-        data = get_yaml(PATH("../config/fail.yaml"))
-        if  len(data) > 0:
-            print("执行失败用例===用例有数据")
-        else:
-            print("执行失败用例==用例无法数据")
-        return data
-    else:
-        print("请传入正确的运行模式")
-        return []
+    modules_s = ""
+    for i in set(modules):
+        modules_s = modules_s + i + ","
+    # 记录测试模块
+    return modules_s.rstrip(",")

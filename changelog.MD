@@ -1,3 +1,31 @@
+# 2020-7-5
+## 调整逻辑
+- 重构所有代码
+- 读取用例模式改变，修改为testcae/module/test.air的方式
+- ```runner1.py```
+```buildoutcfg
+  # test_plan=1 表示调试用例，运行某几个模块用例；0表示全部用例，运行全部模块用例
+    data = {"root_path": root_path, "test_plan": 0, "test_module": [], "dev": "TPG5T18130013404", "phone": "Nova2s"}
+    # data = {"root_path": root_path, "test_plan": 1, "test_module": ["他的"], "dev": "TPG5T18130013404", "phone": "Nova2s"}
+    run_case(data)
+```
+- 新增调试单个模块下用例
+- ```runner2.py```
+```buildoutcfg
+    root_path = PATH("air_case/我的")
+    test_plan = 1  # 0表示运行模块下所有用例,1表示运行模块下的test_data里面的用例
+    test_data = ["打开我的文章.air"]
+    run_case({"root_path": root_path, "test_plan": test_plan, "test_data": test_data,  "dev": "TPG5T18130013404",
+              "phone": "Nova2s"})
+```
+## 注意事项
+- **windows中用pycharm若出现adb命令异常**
+    - 如无法获取到设备尽量需要和airtestIDE的adb保持一致，详细参考[官方文档](https://airtest.netease.com/docs/cn/2_device_connection/2_android_faq.html)
+- **测试详细报告中，如果没有视频回放**
+    - 手动打开手机端的yosemite，点击开始录屏，给予权限，最好是和PocoService一样，用手动管理，所有启动全部打开
+- **想同时允许多个设备**
+    - 只要在runner1/runner2中，修改不同的参数，然后在pycharm中多次运行，就能启动多设备
+    - 后续新增多进程多机并发
 # 2020-6-12
 - 代码在runner2.py
 - 支持用例采用yml编写方式

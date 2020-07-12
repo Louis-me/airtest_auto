@@ -17,7 +17,6 @@ from util.android_util import attached_devices
 from util.common import get_test_case_runner2, get_case_total_time, get_test_modules, Runner3Common
 from datetime import datetime
 import time
-from util.tasks import Tasks
 
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
@@ -95,14 +94,10 @@ class CustomAirtestCase(AirtestCase):
     def run_case1(self, data_item):
         _dev = data_item["dev"]
         # 记录测试设备
-        # Tasks.test_dev += _dev + ","
         Runner3Common.set_case_module_dev({"test_dev": _dev})
         # 记录测试模块
         for i in data_item["test_module"]:
-            # Tasks.test_modules += i + ","
             Runner3Common.set_case_module_dev({"test_modules": i})
-        # print("====设备=%s==" % Tasks.test_dev)
-        # print("====111=%s==" % Tasks.test_modules)
 
         get_case_data = Runner3Common.get_cases(data_item, _dev, self.root_path)
         for i in get_case_data:

@@ -17,7 +17,7 @@ def operate():
     try:
         poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
         # 初始化用例
-        init_app()
+        init_app({"poco": poco})
         # 得到上级目录
         path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
         # 得到用例名称,用例配置文件一般和用例名字保持一致
@@ -29,7 +29,10 @@ def operate():
     except Exception as e:
         snapshot(msg="报错后截图")
         raise e
+    finally:
+        destory()
 
 
 operate()
+
 

@@ -7,16 +7,37 @@ import yaml
 from datetime import datetime
 
 
-def init_app(extend=None):
+def init_app(extend={}):
     """
     初始化数据,根据需求来定制
     :param extend:
     :return:
     """
     auto_setup(__file__)
+    if extend.get("poco"):
+        print("====进入操作yousemite=======")
+        poco = extend["poco"]
+        start_app("com.netease.nie.yosemite")
+        sleep(2)
+        if poco("com.android.systemui:id/remember").exists():
+            poco("com.android.systemui:id/remember").click()
+        if poco(text="确定").exists():
+            poco(text="确定").click()
+
+        if poco("android:id/button1").exists():
+            poco("android:id/button1").click()
     stop_app("com.jianshu.haruki")
     sleep(2)
     start_app("com.jianshu.haruki")
+
+
+def destory(extend={}):
+    """
+    用例结束后的其他操作
+    :param extend:
+    :return:
+    """
+    stop_app("com.netease.nie.yosemite")
 
 
 def operate_test_case(poco, yml):

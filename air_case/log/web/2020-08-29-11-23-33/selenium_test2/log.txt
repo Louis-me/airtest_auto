@@ -1,0 +1,1 @@
+{"tag": "function", "depth": 1, "time": 1598671435.8359566, "data": {"name": "get", "call_args": {"self": "<airtest_selenium.proxy.WebChrome (session=\"a5911e9a7d6f302ac570993d9fc5c66f\")>", "address": "http://www.baidu.com"}, "start_time": 1598671431.071684, "ret": null, "end_time": 1598671435.8359566}}

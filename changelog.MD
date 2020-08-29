@@ -1,3 +1,7 @@
+# 2020-8-29
+- 优化日志记录方式
+- 引入selenium，在runner4.py
+
 # 2020-7-12
 - 新增多设备并行，代码在runner3.py中
 - config/case_data.json 记录测试设备和测试手机

@@ -87,10 +87,11 @@ class CustomAirtestCase(AirtestCase):
         # 整个用例开始执行时间
         start_time = datetime.now().strftime("%H:%M:%S")
         modules = []
-
+        # 日志按照日期格式生成
+        log_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         for j in get_data_list:
             # 日志按照日期格式生成
-            log_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+            # log_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
             # 用例开始执行日期
             st_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             # 用例开始执行时间

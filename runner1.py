@@ -4,17 +4,13 @@
 __CreateAt__ = '2020/4/19-17:34'
 
 import shutil
-from datetime import datetime
-from multiprocessing.pool import Pool
 from airtest.cli.runner import AirtestCase, run_script
 from argparse import *
-import airtest.report.report as report
+# import airtest.report.report as report
+from air_case.report import report
 import jinja2
-import time
 import io
-from dateutil.relativedelta import relativedelta  # pip install python-dateutil
 
-from airtest.core.api import start_app, stop_app
 
 from util.android_util import attached_devices
 from util.common import *
@@ -105,7 +101,8 @@ class CustomAirtestCase(AirtestCase):
             # 用例耗时时间
             sum_time = get_case_total_time(s_time, e_time)
             # 生成测试用例的详情报告
-            rpt = report.LogToHtml(get_run["script"], get_run["log"])
+            rpt = report.LogToHtml(get_run["script"], get_run["log"], "../../../../report")
+            # rpt = report.LogToHtml(get_run["script"], get_run["log"])
             rpt.report("log_template.html", output_file=get_run["output_file"])
             # 记录测试结果
             result = {"name": j["case"].replace(".air", ""), "result": get_run["is_success"], "start_date": st_date,
@@ -141,6 +138,10 @@ class CustomAirtestCase(AirtestCase):
         output_file = os.path.join(data["root_path"], "summary_%s.html" % datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
         with io.open(output_file, 'w', encoding="utf-8") as f:
             f.write(html)
+        # 固定输出给CI
+        output_file = os.path.join(data["root_path"], "summary.html")
+        with io.open(output_file, 'w', encoding="utf-8") as f:
+            f.write(html)
         print(output_file)
 
 
@@ -151,5 +152,5 @@ if __name__ == '__main__':
     root_path = PATH("air_case")
     # test_plan=1 表示调试用例，0表示全部用例
     # data = {"root_path": root_path, "test_plan": 0, "test_module": [], "dev": "TPG5T18130013404", "phone": "Nova2s"}
-    data = {"root_path": root_path, "test_plan": 1, "test_module": ["他的"], "dev": "TPG5T18130013404", "phone": "Nova2s"}
+    data = {"root_path": root_path, "test_plan": 1, "test_module": ["我的"], "dev": "TPG5T18130013404", "phone": "Nova2s"}
     run_case(data)

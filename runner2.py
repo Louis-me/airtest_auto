@@ -6,15 +6,15 @@ __CreateAt__ = '2020/4/19-17:34'
 
 from airtest.cli.runner import AirtestCase, run_script
 from argparse import *
-import airtest.report.report as report
+# import airtest.report.report as report
+from air_case.report import report
 import jinja2
 import shutil
 import os
 import io
 from util.android_util import attached_devices
-from util.common import get_test_case_runner2, get_case_total_time, get_test_modules
+from util.common import get_test_case_runner2, get_case_total_time
 from datetime import datetime
-import time
 
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
@@ -105,7 +105,8 @@ class CustomAirtestCase(AirtestCase):
             # 用例耗时时间
             sum_time = get_case_total_time(s_time, e_time)
             # 生成测试用例的详情报告
-            rpt = report.LogToHtml(get_run["script"], get_run["log"])
+            # rpt = report.LogToHtml(get_run["script"], get_run["log"])
+            rpt = report.LogToHtml(get_run["script"], get_run["log"], "../../../../report")
             rpt.report("log_template.html", output_file=get_run["output_file"])
             # 记录测试结果
             result = {"name": j.replace(".air", ""), "result": get_run["is_success"], "start_date": st_date,
@@ -113,7 +114,7 @@ class CustomAirtestCase(AirtestCase):
             self.results["data"].append(result)
             # 记录失败用例
             if not get_run["is_success"]:
-                self.fail_data.append({"case": j["case"]})
+                self.fail_data.append({"case": j})
 
         # 整个用例结束执行时间
         end_time = datetime.now().strftime("%H:%M:%S")
@@ -141,7 +142,6 @@ class CustomAirtestCase(AirtestCase):
                                    "summary_%s.html" % datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
         with io.open(output_file, 'w', encoding="utf-8") as f:
             f.write(html)
-        # print(output_file)
 
 
 if __name__ == '__main__':

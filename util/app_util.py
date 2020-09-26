@@ -17,6 +17,7 @@ def init_app(extend={}):
     if extend.get("poco"):
         print("====进入操作yousemite=======")
         poco = extend["poco"]
+        stop_app("com.netease.nie.yosemite")
         start_app("com.netease.nie.yosemite")
         sleep(2)
         if poco("com.android.systemui:id/remember").exists():
@@ -26,6 +27,9 @@ def init_app(extend={}):
 
         if poco("android:id/button1").exists():
             poco("android:id/button1").click()
+        if poco(text="开始录屏").exists():
+            print("开始录屏")
+            poco(text="开始录屏").click()
     stop_app("com.jianshu.haruki")
     sleep(2)
     start_app("com.jianshu.haruki")
@@ -37,6 +41,12 @@ def destory(extend={}):
     :param extend:
     :return:
     """
+    start_app("com.netease.nie.yosemite")
+    if extend.get("poco"):
+        poco = extend["poco"]
+        if poco(text="结束录屏").exists():
+            print("结束录屏")
+            poco(text="结束录屏").click()
     stop_app("com.netease.nie.yosemite")
 
 
@@ -60,7 +70,7 @@ def operate_test_case(poco, yml):
         # 非if语句的click事件
         if len(event_click) > 1 and len(event_if) == 1:
             # 智能等待
-            eval(event_click[0] + ".wait_for_appearance(60)")
+            eval(event_click[0] + ".wait_for_appearance(5)")
             # 执行用例
             eval(i)
         else:
@@ -82,8 +92,8 @@ def skip_adv(poco):
     num = 0
     while True:
         sleep(1)
-        if poco(textMatches="^.*跳过$").exists():
-            poco(textMatches="^.*跳过$").click()
+        if poco(textMatches="^跳过.*$").exists():
+            poco(textMatches="^跳过.*").click()
             print("已经点击跳过广告按钮")
             break
         num += 1

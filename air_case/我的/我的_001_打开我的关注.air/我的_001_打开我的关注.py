@@ -14,8 +14,8 @@ from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 
 def operate():
+    poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
     try:
-        poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
         # 初始化用例
         init_app({"poco": poco})
         # 得到上级目录
@@ -30,7 +30,7 @@ def operate():
         snapshot(msg="报错后截图")
         raise e
     finally:
-        destory()
+        destory({"poco": poco})
 
 
 operate()

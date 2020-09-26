@@ -1,3 +1,8 @@
+# 2020-9-26 
+- runner1.py中新增summary.html给CI使用
+- 优化手机录屏失败问题
+- 剥离测试报告，摆脱本地依赖
+- windows的CI简单运用
 # 2020-8-29
 - 优化日志记录方式
 - 引入selenium，在runner4.py

@@ -6,11 +6,11 @@ __CreateAt__ = '2020/4/19-17:34'
 import shutil
 from airtest.cli.runner import AirtestCase, run_script
 from argparse import *
-# import airtest.report.report as report
 from air_case.report import report
 import jinja2
 import io
-
+from util.send_email import SendEmail
+from util.compress_file import copy_and_zip
 
 from util.android_util import attached_devices
 from util.common import *
@@ -40,7 +40,7 @@ def run(root_path, test_case, device, log_date):
         os.makedirs(log)
         print(str(log) + 'is created')
     output_file = os.path.join(log, 'log.html')
-    args = Namespace(device=device, log=log, compress=None, recording=True, script=script)
+    args = Namespace(device=device, log=log, compress=None, recording=None, script=script, no_image=None)
     try:
         run_script(args, AirtestCase)
         is_success = True
@@ -53,27 +53,27 @@ class CustomAirtestCase(AirtestCase):
     @classmethod
     def setUpClass(cls):
         super(CustomAirtestCase, cls).setUpClass()
-        # start_app("com.netease.nie.yousemite")
 
     def __init__(self, root_dir):
         self.fail_data = []
         self.results = {"dev": "", "modules": [], "total_time": "", "data": []}
+        self.log_list = []
         super().__init__()
 
     def setUp(self):
         super(CustomAirtestCase, self).setUp()
-        # start_app("com.netease.nie.yousemite")
 
     def tearDown(self):
         print("custom tearDown")
         super(CustomAirtestCase, self).setUp()
-        # stop_app("com.netease.nie.yousemite")
 
     def run_air(self, device, data):
         root_log = os.path.join(data["root_path"], "log")
+        # remove_log表示如果传值就会删除整个log文件夹，删除后无法查看历史报告
         if os.path.isdir(root_log):
-            # shutil.rmtree(root_log)
-            pass
+            if data.get("remove_log"):
+                shutil.rmtree(root_log, ignore_errors=True)
+                print("删除log文件夹")
         else:
             os.makedirs(root_log)
         get_data_list = get_test_case(data)
@@ -109,6 +109,7 @@ class CustomAirtestCase(AirtestCase):
                       "end_date": end_date, "sum_time": sum_time, "module": j["module"], "log_date": log_date}
             modules.append(j["module"])
             self.results["data"].append(result)
+            self.log_list.append(get_run["log"])
             # 记录失败用例
             if not get_run["is_success"]:
                 self.fail_data.append({"module": j["module"], "case": j["case"]})
@@ -133,24 +134,44 @@ class CustomAirtestCase(AirtestCase):
             autoescape=True
         )
         print("用例结果为：%s" % self.results)
+        t = os.path.join(data["root_path"], "summary_template.html")
+        if not os.path.exists(t):
+            shutil.copy(PATH("util/summary_template.html"), data["root_path"])
         template = env.get_template("summary_template.html", data["root_path"])
         html = template.render({"results": self.results})
         output_file = os.path.join(data["root_path"], "summary_%s.html" % datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
         with io.open(output_file, 'w', encoding="utf-8") as f:
             f.write(html)
+        # 按日期生成测试报告,方便对比历史报告，但是程序入口字段需要设置为"remove_log": False
+        print("测试报告为：%s" % output_file)
+
         # 固定输出给CI
         output_file = os.path.join(data["root_path"], "summary.html")
         with io.open(output_file, 'w', encoding="utf-8") as f:
             f.write(html)
-        print(output_file)
+        # 当发送邮件参数为真，就对文件进行压缩并发送测试报告到指定邮箱
+        if data.get("send_email"):
+            # 压缩测试报告
+            report_file = os.path.join(data["root_path"], "report")
+            case_log = os.path.join(data["root_path"], "log")
+            case_html = output_file
+            zip_list = [report_file, case_log, case_html]
+            zip_path = copy_and_zip(zip_list, "report")
+            # 发送测试报告邮件
+            to_addr = ["284772894@qq.com"]
+            SendEmail.send(zip_path, to_addr)
 
 
 if __name__ == '__main__':
     """
-    python D:/project/airtest_auto/runner1.py
+    python E:/project/trade-auto/runner1.py
     """
     root_path = PATH("air_case")
-    # test_plan=1 表示调试用例，0表示全部用例
+    # test_plan=1 表示调试用例需要配合test_module使用，0表示全部用例,比如:"test_plan": 0, "test_module": ["我的"]
+    # remove_log为真 表示是否运行用例之前，删除log文件夹，删除后会影响查看历史报告
+    # send_email为真，表示发送邮件，否则就不发送
+    # dev参数使用adb devices 获取到设备udid，填进去，若想多台并行，这里的dev必须填正确，不能是同一台手机
     # data = {"root_path": root_path, "test_plan": 0, "test_module": [], "dev": "TPG5T18130013404", "phone": "Nova2s"}
-    data = {"root_path": root_path, "test_plan": 1, "test_module": ["我的"], "dev": "TPG5T18130013404", "phone": "Nova2s"}
+    data = {"root_path": root_path, "remove_log": True, "send_email": True,
+            "test_plan": 0, "test_module": [], "dev": "TPG5T18130013404", "phone": "Nova2s"}
     run_case(data)

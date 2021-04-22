@@ -438,13 +438,15 @@ class LogToHtml(object):
                    else os.path.abspath(os.path.join(self.log_root, f)) for f in record_list]
         # edit 2020-9-26
         if platform.system() == "Windows":
-            records_sp = records[0].split("\\")[4:]
-            records_str = "\\".join(records_sp)
-            records = ["..\\..\\..\\..\\" + records_str]
+            if records:
+                records_sp = records[0].split("\\")[4:]
+                records_str = "\\".join(records_sp)
+                records = ["..\\..\\..\\..\\" + records_str]
         else:
-            records_sp = records[0].split("/")[4:]
-            records_str = "/".join(records_sp)
-            records = ["../../../../" + records_str]
+            if records:
+                records_sp = records[0].split("/")[4:]
+                records_str = "/".join(records_sp)
+                records = ["../../../../" + records_str]
         if not self.static_root.endswith(os.path.sep):
             self.static_root = self.static_root.replace("\\", "/")
             self.static_root += "/"

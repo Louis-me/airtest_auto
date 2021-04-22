@@ -6,48 +6,54 @@ from airtest.core.api import *
 import yaml
 from datetime import datetime
 
+from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
-def init_app(extend={}):
+from read_ini import ReadIni
+
+
+def init_app():
     """
     初始化数据,根据需求来定制
-    :param extend:
     :return:
     """
+
+    path = lambda p: os.path.abspath(
+        os.path.join(os.path.dirname(__file__), p)
+    )
+    ini_path = path("../config/setting.ini")
+    pkg = ReadIni(ini_path).get_pkg()
     auto_setup(__file__)
-    if extend.get("poco"):
-        print("====进入操作yousemite=======")
-        poco = extend["poco"]
-        stop_app("com.netease.nie.yosemite")
-        start_app("com.netease.nie.yosemite")
-        sleep(2)
-        if poco("com.android.systemui:id/remember").exists():
-            poco("com.android.systemui:id/remember").click()
-        if poco(text="确定").exists():
-            poco(text="确定").click()
-
-        if poco("android:id/button1").exists():
-            poco("android:id/button1").click()
-        if poco(text="开始录屏").exists():
-            print("开始录屏")
-            poco(text="开始录屏").click()
-    stop_app("com.jianshu.haruki")
+    # end_mp4()
+    # start_mp4()
+    stop_app(pkg)
     sleep(2)
-    start_app("com.jianshu.haruki")
+    start_app(pkg)
 
-
-def destory(extend={}):
-    """
-    用例结束后的其他操作
-    :param extend:
-    :return:
-    """
+def end_mp4():
+    poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
     start_app("com.netease.nie.yosemite")
-    if extend.get("poco"):
-        poco = extend["poco"]
-        if poco(text="结束录屏").exists():
-            print("结束录屏")
-            poco(text="结束录屏").click()
+    if poco(text="结束录屏").exists():
+        print("结束录屏")
+        poco(text="结束录屏").click()
     stop_app("com.netease.nie.yosemite")
+
+
+def start_mp4():
+    stop_app("com.netease.nie.yosemite")
+    start_app("com.netease.nie.yosemite")
+    sleep(2)
+    poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
+
+    if poco("com.android.systemui:id/remember").exists():
+        poco("com.android.systemui:id/remember").click()
+    if poco(text="确定").exists():
+        poco(text="确定").click()
+
+    if poco("android:id/button1").exists():
+        poco("android:id/button1").click()
+    if poco(text="开始录屏").exists():
+        print("开始录屏")
+        poco(text="开始录屏").click()
 
 
 def operate_test_case(poco, yml):
@@ -57,8 +63,7 @@ def operate_test_case(poco, yml):
     :param yml:
     :return:
     """
-    # handing_error(poco)
-    skip_adv(poco)
+    handing_error(poco)
     with open(yml, encoding='utf-8') as f:
         d = yaml.safe_load(f)
     # 启动应用后的容错
@@ -83,33 +88,16 @@ def operate_test_case(poco, yml):
         handing_error(poco)
 
 
-def skip_adv(poco):
-    """
-    跳过广告
-    :param poco:
-    :return:
-    """
-    num = 0
-    while True:
-        sleep(1)
-        if poco(textMatches="^跳过.*$").exists():
-            poco(textMatches="^跳过.*").click()
-            print("已经点击跳过广告按钮")
-            break
-        num += 1
-        if num > 5:
-            print("没有找到跳过广告按钮")
-            break
-
-
 def handing_error(poco):
     """
     容错处理
     :param poco:
     :return:
     """
+    if poco(textMatches="^跳过.*$").exists():
+        poco(textMatches="^跳过.*").click()
     # 自定义容错处理,比如系统的授权
-    for j in ["我知道了", "始终运行", "取消"]:
+    for j in ["我知道了", "始终运行"]:
         if poco(text=j).exists():
             # package = poco(text=j).attr("package")
             # # 只容错非测试应用包的数据
@@ -117,8 +105,4 @@ def handing_error(poco):
             poco(text=j).click()
             print("进入第一次容错")
             sleep(2)
-        for k in ["我知道了", "始终运行", "取消"]:
-            if poco(text=j).exists():
-                poco(text=k).click()
-                print("进入二次容错")
-                sleep(2)
+init_app()

@@ -3,7 +3,6 @@ import os
 import shutil
 
 
-
 def copy_and_zip(file_list, dst_folder_name):
     '''
     批量复制文件到指定文件夹，然后把指定文件夹的内容压缩成ZIP并且删掉该文件夹
@@ -17,7 +16,7 @@ def copy_and_zip(file_list, dst_folder_name):
     source = os.getcwd() + "\\" + dst_folder_name
     shutil.make_archive(source, "zip", source)
     shutil.rmtree(source)
-    return  os.path.join( os.getcwd(), "report.zip")
+    return os.path.join(os.getcwd(), "%s.zip" % dst_folder_name)
 
 
 def copy_file(srcfile, filename):
@@ -44,7 +43,6 @@ def copy_file(srcfile, filename):
 
 
 if __name__ == '__main__':
-
     file1 = r"E:\project\trade-auto\air_case\summary.html"
     file2 = r"E:\\project\\trade-auto\\air_case\\log"
     file3 = r"E:\\project\\trade-auto\\air_case\\report"

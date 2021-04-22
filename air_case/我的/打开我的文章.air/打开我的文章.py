@@ -17,20 +17,17 @@ def operate():
     poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
     try:
         # 初始化用例
-        init_app({"poco": poco})
-        # 得到上级目录
-        path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-        # 得到用例名称,用例配置文件一般和用例名字保持一致
-        case_name = os.path.basename(__file__).strip(".py") + ".yml"
-        # 得到用例目录
-        case_path = os.path.join(path, "yml", case_name)
-        # 执行用例
-        operate_test_case(poco, case_path)
+        init_app()
+        poco(text="取消").click() if poco(text="取消").exists() else print("")
+        # 点击我的
+        poco("com.jianshu.haruki:id/tv_more_menu").wait(5).click()
+        # 点击我的文章
+        poco(text="我的文章").wait(5).click()
+        # 向上滑动
+        poco("com.jianshu.haruki:id/refresh_view").focus([0.5, 0.5]).swipe([0.5, -0.5])
     except Exception as e:
         snapshot(msg="报错后截图")
         raise e
-    finally:
-        destory({"poco": poco})
 
 
 operate()

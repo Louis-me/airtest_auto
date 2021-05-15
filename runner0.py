@@ -52,6 +52,8 @@ def run(root_path, test_case, device, log_date, recording=None):
     if recording == "true":
         recording = True
         print("开启录屏")
+    else:
+        recording = None
     args = Namespace(device=device, log=log, compress=None, recording=recording, script=script, no_image=None)
     try:
         run_script(args, AirtestCase)

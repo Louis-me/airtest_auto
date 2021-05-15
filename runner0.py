@@ -86,6 +86,11 @@ class CustomAirtestCase(AirtestCase):
             if data.get("remove_log"):
                 shutil.rmtree(root_log, ignore_errors=True)
                 print("删除log文件夹")
+                for i in os.listdir(data["root_path"]):
+                    # 删除所有html报告文件，但是不删除模板文件
+                    if i.find(".html") != -1 and i.find("summary_template") == -1:
+                        os.remove(os.path.join(data["root_path"], i))
+                print("删除所有html报告文件文件")
         else:
             os.makedirs(root_log)
         get_data_list = get_test_case(data)

@@ -439,14 +439,14 @@ class LogToHtml(object):
         # edit 2020-9-26
         if platform.system() == "Windows":
             if records:
-                records_sp = records[0].split("\\")[4:]
-                records_str = "\\".join(records_sp)
-                records = ["..\\..\\..\\..\\" + records_str]
+                records_sp = records[0].split("\\")[-1]
+                # records_str = "\\".join(records_sp)
+                records = [records_sp]
         else:
             if records:
-                records_sp = records[0].split("/")[4:]
-                records_str = "/".join(records_sp)
-                records = ["../../../../" + records_str]
+                records_sp = records[0].split("\\")[-1]
+                # records_str = "/".join(records_sp)
+                records = [records_sp]
         if not self.static_root.endswith(os.path.sep):
             self.static_root = self.static_root.replace("\\", "/")
             self.static_root += "/"

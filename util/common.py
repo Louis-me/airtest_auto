@@ -5,9 +5,11 @@ __CreateAt__ = '2020/4/19-18:31'
 import os
 from datetime import datetime
 import json
+
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__), p)
 )
+
 
 def get_test_case(data):
     if data["test_plan"] == 1:
@@ -171,6 +173,30 @@ class Runner3Common(object):
                     for k in os.listdir(os.path.join(root_path, j)):
                         if k.find(".air") != -1:
                             res.append({"module": j, "case": k})
+        if not res:
+            print("无测试用例")
+        return res
+
+
+class Runner4Common():
+
+    @staticmethod
+    def get_cases(data_item, root_path):
+        """
+        得到用例列表
+        :param data_item:
+        :param root_path: 用例根目录
+        :return:
+        """
+        res = []
+        # 得到设备的各个模块
+        for j in data_item["test_module"]:
+            module_case = os.path.isdir(os.path.join(root_path, j))
+            # 如果用例模块下文件夹存在
+            if module_case:
+                for k in os.listdir(os.path.join(root_path, j)):
+                    if k.find(".air") != -1:
+                        res.append({"module": j, "case": k})
         if not res:
             print("无测试用例")
         return res

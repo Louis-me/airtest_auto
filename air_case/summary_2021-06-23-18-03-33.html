@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>测试结果汇总</title>
+    <style>
+        .fail {
+            color: red;
+			width: 7emem;
+			text-align: center;
+        }
+        .success {
+            color: green;
+			width: 7emem;
+			text-align: center;
+        }
+		.details-col-elapsed {
+			width: 7em;
+			text-align: center;
+		}
+		.details-col-msg {
+			width: 7em;
+			text-align: center;
+			background-color:#ccc;
+		}
+
+    </style>
+</head>
+<body>
+<div>
+<div><h2>Test Statistics</h2></div>
+
+    <table width="800" border="thin" cellspacing="0" cellpadding="0">
+        <tr>
+            <th align="center">测试模块</th>
+            <td>[&#39;home&#39;, &#39;home1&#39;]</td>
+            <th>总耗时</th>
+            <td>0:00:53</td>
+            <td>测试手机：</td>
+        </tr>
+        <tr >
+            <th>案例名称</th>
+            <th>执行结果</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>耗时</th>
+        </tr>
+        
+        <tr>
+            <td style="min-width: 200px">
+                
+                    <a href="log/home1/2021-06-23-18-02-42/test001_home_open_me/log.html" target="view_window">test001_home_open_me</a>
+                
+            </td>
+            <td class="fail">失败</td>
+            <td>2021-06-23 18:02:42</td>
+            <td>2021-06-23 18:03:15</td>
+            <td>0:00:33</td>
+        </tr>
+        
+        <tr>
+            <td style="min-width: 200px">
+                
+                    <a href="log/home/2021-06-23-18-02-42/test001_home_open_me/log.html" target="view_window">test001_home_open_me</a>
+                
+            </td>
+            <td class="fail">失败</td>
+            <td>2021-06-23 18:02:42</td>
+            <td>2021-06-23 18:03:21</td>
+            <td>0:00:39</td>
+        </tr>
+        
+        <tr>
+            <td style="min-width: 200px">
+                
+                    <a href="log/home1/2021-06-23-18-03-15/test002_home_open_mybook/log.html" target="view_window">test002_home_open_mybook</a>
+                
+            </td>
+            <td class="success">成功</td>
+            <td>2021-06-23 18:03:15</td>
+            <td>2021-06-23 18:03:28</td>
+            <td>0:00:13</td>
+        </tr>
+        
+        <tr>
+            <td style="min-width: 200px">
+                
+                    <a href="log/home/2021-06-23-18-03-21/test002_home_open_mybook/log.html" target="view_window">test002_home_open_mybook</a>
+                
+            </td>
+            <td class="success">成功</td>
+            <td>2021-06-23 18:03:21</td>
+            <td>2021-06-23 18:03:33</td>
+            <td>0:00:12</td>
+        </tr>
+        
+    </table>
+</div>
+</body>
+</html>

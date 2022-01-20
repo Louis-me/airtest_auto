@@ -147,8 +147,8 @@ class CustomAirtestCase(AirtestCase):
 
 test_data = {"root_path": PATH("air_case"), "test_case":
     [
-        {"test_module": ["home"]},
-        {"test_module": ["home1"]}
+        {"test_module": ["home",'home1']},
+        # {"test_module": ["home1"]}
     ]
              }
 if __name__ == '__main__':

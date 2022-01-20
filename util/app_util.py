@@ -20,7 +20,7 @@ def init_app():
     path = lambda p: os.path.abspath(
         os.path.join(os.path.dirname(__file__), p)
     )
-    ini_path = path("../config/setting.ini")
+    ini_path = path("../config/setting1.ini")
     pkg = ReadIni(ini_path).get_pkg()
     auto_setup(__file__)
     # end_mp4()

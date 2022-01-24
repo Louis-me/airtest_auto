@@ -23,37 +23,11 @@ def init_app():
     ini_path = path("../config/setting1.ini")
     pkg = ReadIni(ini_path).get_pkg()
     auto_setup(__file__)
-    # end_mp4()
-    # start_mp4()
     stop_app(pkg)
     sleep(2)
     start_app(pkg)
 
-def end_mp4():
-    poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
-    start_app("com.netease.nie.yosemite")
-    if poco(text="结束录屏").exists():
-        print("结束录屏")
-        poco(text="结束录屏").click()
-    stop_app("com.netease.nie.yosemite")
 
-
-def start_mp4():
-    stop_app("com.netease.nie.yosemite")
-    start_app("com.netease.nie.yosemite")
-    sleep(2)
-    poco = AndroidUiautomationPoco(use_airtest_input=True, screenshot_each_action=False)
-
-    if poco("com.android.systemui:id/remember").exists():
-        poco("com.android.systemui:id/remember").click()
-    if poco(text="确定").exists():
-        poco(text="确定").click()
-
-    if poco("android:id/button1").exists():
-        poco("android:id/button1").click()
-    if poco(text="开始录屏").exists():
-        print("开始录屏")
-        poco(text="开始录屏").click()
 
 
 def operate_test_case(poco, yml):
@@ -105,4 +79,3 @@ def handing_error(poco):
             poco(text=j).click()
             print("进入第一次容错")
             sleep(2)
-init_app()

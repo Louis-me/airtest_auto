@@ -3,6 +3,8 @@
 __CreateAt__ = '2020/4/19-18:31'
 
 import os
+import platform
+import subprocess
 from datetime import datetime
 import json
 
@@ -148,9 +150,12 @@ class Runner3Common(object):
         """
         path = PATH("../config/result_data.json")
         get_d = cls.get_result_json()
-        get_d["modules"] = d["modules"]
-        get_d["dev"] = d["dev"]
-        get_d["total_time"] = d["total_time"]
+        get_d["modules"] = d.get("modules")
+        get_d["phone"] = d.get("phone")
+        get_d["total_time"] = d.get("total_time")
+        get_d["success"] = d.get("success")
+        get_d["count"] = d.get("count")
+        get_d["start_time"] = d.get("start_time")
         with open(path, "w", encoding="utf-8") as f:
             json.dump(get_d, f)
 
@@ -200,3 +205,14 @@ class Runner4Common():
         if not res:
             print("无测试用例")
         return res
+
+
+def init_runner():
+    os_name = platform.system()
+    if os_name == "Windows":
+        cmd = 'taskkill /f /im "python.exe"'
+        # os.system('taskkill /f /im "python.exe"')
+        subprocess.Popen(cmd, shell=True)
+
+    else:
+        pass

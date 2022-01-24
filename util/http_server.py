@@ -1,6 +1,10 @@
 # -*- coding=utf-8 -*-
 import os
 import platform
+import subprocess
+import threading
+
+# pip install Twisted
 
 
 class HttpServer(object):
@@ -9,28 +13,29 @@ class HttpServer(object):
     """
 
     @classmethod
-    def start(cls, http_path, port):
+    def start(cls, local_host_path, port):
         cls.stop(port)
-        driver = http_path.split(":")[0] + ":"
-        print("cd %s && %s && python -m http.server %s" % (http_path, driver, port))
-        os.popen("cd %s && %s && python -m http.server %s" % (http_path, driver, port))
+        cmd = "twistd web --listen=tcp:%s --path=%s &" % (port, local_host_path)
+        subprocess.Popen(cmd, shell=True)
+        print("如果无法访问http服务请手动执行命令 %s" % cmd)
 
     @classmethod
     def stop(cls, port):
         os_name = platform.system()
         if os_name == "Windows":
-            find_port = 'netstat -aon | findstr %s' % port
-            result = os.popen(find_port)
-            text = result.read()
-            pid = text[-5:-1]
-            # 占用端口的pid
-            find_kill = 'taskkill -f -pid %s' % pid
-            print(find_kill)
-            result = os.popen(find_kill)
-            return result.read()
+            with os.popen('netstat -aon|findstr "%s"' % port) as res:
+                res = res.read().split('\n')
+            result = []
+            for line in res:
+                temp = [i for i in line.split(' ') if i != '']
+                if len(temp) > 4:
+                    result.append({'pid': temp[4], 'address': temp[1], 'state': temp[3]})
+            for i in result:
+                os.popen("taskkill -pid %s -f" % i["pid"])
         else:
             pass
-
-
-if __name__ == "__main__":
-    HttpServer.start(r"E:\proj\aritest", "8000")
+if __name__ =="__main__":
+    # HttpServer.start(r" E:\proj\aritest",'172.31.105.196', '8000')
+    tt = threading.Thread(target=HttpServer.start, args=(), kwargs={"local_host_path": r"E:\proj\aritest", "port":"8000"})
+    tt.start()
+    print("21212121")

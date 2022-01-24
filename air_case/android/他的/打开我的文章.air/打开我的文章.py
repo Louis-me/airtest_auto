@@ -19,7 +19,8 @@ def operate():
         # 初始化用例
         init_app()
         # 强制等待
-        sleep(1)
+        sleep(2)
+        handing_error(poco)
         # 有取消就点击
         poco(text="取消").click() if poco(text="取消").exists() else print("")
         # 点击我的
@@ -27,7 +28,7 @@ def operate():
         # 点击我的文章
         poco(text="我的文章").wait(5).click()
         # 向上滑动
-        poco("com.jianshu.haruki:id/refresh_view").focus([0.5, 0.5]).swipe([0.5, -0.5])
+        # poco("com.jianshu.haruki:id/refresh_view").focus([0.5, 0.5]).swipe([0.5, -0.5])
     except Exception as e:
         snapshot(msg="报错后截图")
         raise e

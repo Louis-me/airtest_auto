@@ -159,8 +159,7 @@
           <h1>汇总报告</h1>
           <div class="center">
             <div class="time zh">开始时间：{{results.start_time}}，耗时 <b>{{results.total_time}}</b></div>
-            <div class="time zh">测试模块：<b>{{results.modules}}</b></div>
-            <div class="time zh">测试设备 ：<b>{{results.phone}}--{{results.dev}}</b></div>
+             <div class="time zh">测试模块：<b>{{results.modules}}</b></div>
           </div>
           <div class="head">
             <header class="zh"><span class="rate"></span>成功率：</span> {{results["success"]}}/{{results["count"]}}</header>
@@ -183,6 +182,7 @@
               <div class="table-col short zh">序号</div>
               <div class="table-col short zh">状态</div>
               <div class="table-col mid zh">用例</div>
+              <div class="table-col mid zh">设备</div>
               <div class="table-col mid zh">耗时</div>
               <div class="table-col ">--</div>
             </div>
@@ -192,8 +192,9 @@
                 {% set ns.found = ns.found + 1 %}
                 <div class="table-col short">{{ns.found}}</div>
                 <div class="table-col short zh {{'success' if dat.result else 'failed'}}">{{"成功" if dat.result else "失败"}}</div>
+                <div class="table-col mid">{{dat['name']}}</div>
+                <div class="table-col mind">{{dat.dev}}--{{dat.phone}}</div>
                 <div class="table-col mid">{{dat['sum_time']}}</div>
-<!--                <div class="table-col long">{{results.phone}}&#45;&#45;{{dat.phone}}</div>-->
                 <div class="table-col detail zh">
                      <a href="{{dat.log}}/log.html" target="view_window">查看详情</a>
                 </div>

@@ -53,6 +53,9 @@ class ReadIni(object):
     def get_pkg(self):
         return self.config['default']['pkg']
 
+    def get_web_driver_path(self):
+        return self.config['default']['driver_path']
+
 
 if __name__ == "__main__":
 

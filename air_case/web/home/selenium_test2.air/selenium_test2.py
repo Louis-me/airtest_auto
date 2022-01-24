@@ -5,15 +5,13 @@ from airtest.core.api import *
 import sys
 # pip3 install pynput
 # pip3 install airtest-selenium
-# 得到绝对路径
 abs_path = os.path.abspath(os.path.dirname(__file__))
-# 得到公共用例目录
-common_path = os.path.join(abs_path.split("airtest_auto")[0], "airtest_auto", "util")
+common_path = os.path.join(abs_path.split("airtest_auto")[0], "airtest_auto", "web_util")
 sys.path.append(common_path)
-from airtest_selenium.proxy import WebChrome
-driver = WebChrome(os.path.join(common_path, "chromedriver.exe"))
-driver.implicitly_wait(20)
-auto_setup(__file__)
+from web_util import *
+
+driver = get_driver()
+# auto_setup(__file__)
 try:
     driver.get("http://www.baidu.com")
 except Exception as e:

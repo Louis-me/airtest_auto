@@ -29,22 +29,28 @@ PATH = lambda p: os.path.abspath(
 
 
 def run_case(data):
+    dev_connect = None
     # 当平台为安卓时，检查是否连接成功
     if data.get("platform", "1") == "android":
+        print("启动安卓启动器")
         devices = attached_devices()
         if not devices:
             print("无可用设备")
             return
+        dev_connect = data["dev_connect"]
     elif data.get("platform", "1") == "ios":
         pass
     elif data.get("platform", "1") == "web":
-        pass
-    test = CustomAirtestCase(data["root_path"], data["dev_connect"])
+        print("启动web启动器")
+    test = CustomAirtestCase(data["root_path"], dev_connect)
     test.run_air(data)
 
 
 def run(root_dir, test_case, device, dev_connect, local_host_path, log_date, recording, report_host, phone):
-    air_device = [dev_connect + device]  # 取设备
+    if device == "web":
+        air_device = None
+    else:
+        air_device = [dev_connect + device]  # 取设备
     script = os.path.join(root_dir, test_case["module"], test_case["case"])
     log_host_path = os.path.join(test_case["module"], test_case["case"].replace('.air', ''))
     log = os.path.join(local_host_path, log_host_path)
